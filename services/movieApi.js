@@ -1,9 +1,17 @@
-const mockData = require('../utils/mocks/movies');
+const MongoLib = require('../lib/mongoDb');
 
 class MovieApi {
-	async getList() {
+	constructor() {
+		this.mongodb = new MongoLib();
+		this.collection = 'moviesapi';
+	}
+
+	async getList({ tags } = {}) {
+		//Filter Mongo syntax
+		const filter = tags && { tags: { $in: tags } };
+
 		try {
-			const data = await Promise.resolve(mockData);
+			const data = await this.mongodb.getAll(this.collection, filter);
 
 			return data || [];
 		} catch (error) {
@@ -13,7 +21,7 @@ class MovieApi {
 
 	async getMovie(id) {
 		try {
-			const movie = await Promise.resolve(mockData[0]);
+			const movie = await this.mongodb.get(this.collection, id);
 
 			return movie;
 		} catch (error) {
@@ -23,9 +31,9 @@ class MovieApi {
 
 	async createMovie(newMovie) {
 		try {
-			const movie = await Promise.resolve(mockData[0].id);
+			const movie = await this.mongodb.create(this.collection, newMovie);
 
-			return { id: movie, ...newMovie };
+			return movie;
 		} catch (error) {
 			throw new Error(error);
 		}
@@ -33,7 +41,7 @@ class MovieApi {
 
 	async updateMovie(id, newBody) {
 		try {
-			const movie = await Promise.resolve(mockData[0]);
+			const movie = await this.mongodb.update(this.collection, id, newBody);
 
 			return movie;
 		} catch (error) {
@@ -43,7 +51,7 @@ class MovieApi {
 
 	async removeMovie(id) {
 		try {
-			const movie = await Promise.resolve(mockData[0]);
+			const movie = await this.mongodb.remove(this.collection, id);
 
 			return movie;
 		} catch (error) {

@@ -8,8 +8,10 @@ function routes(app) {
 	const MoviesApi = new MovieApi();
 
 	router.get('/api/movies', async (req, res, next) => {
+		const { tags } = req.query;
+
 		try {
-			const data = await MoviesApi.getList();
+			const data = await MoviesApi.getList(tags);
 
 			res.status(200).json({
 				data: data,
