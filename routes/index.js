@@ -13,12 +13,14 @@ function routes(app) {
 		try {
 			const data = await MoviesApi.getList(tags);
 
+			throw new Error('Error getting messages');
+
 			res.status(200).json({
 				data: data,
 				message: 'Movies Listed',
 			});
 		} catch (error) {
-			next('Bad Request! ' + error);
+			next(error);
 		}
 	});
 
@@ -33,7 +35,7 @@ function routes(app) {
 				message: 'Movie Retrieved',
 			});
 		} catch (error) {
-			next('Bad Request! ' + error);
+			next(error);
 		}
 	});
 
@@ -48,7 +50,7 @@ function routes(app) {
 				message: 'Movie Created',
 			});
 		} catch (error) {
-			next('Bad Request! ' + error);
+			next(error);
 		}
 	});
 
@@ -63,7 +65,7 @@ function routes(app) {
 				message: 'Movie Updated',
 			});
 		} catch (error) {
-			next('Bad Request! ' + error);
+			next(error);
 		}
 	});
 
@@ -78,7 +80,7 @@ function routes(app) {
 				message: 'Movie Removed Succesfully',
 			});
 		} catch (error) {
-			next('Bad Request! ' + error);
+			next(error);
 		}
 	});
 }
