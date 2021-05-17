@@ -143,4 +143,14 @@ const movies = [
 	},
 ];
 
-module.exports = movies;
+class MoviesMockServices {
+	async getList() {
+		return Promise.resolve(movies);
+	}
+
+	async createMovie() {
+		return Promise.resolve(movies[0]);
+	}
+}
+
+module.exports = { movies, MoviesMockServices };
