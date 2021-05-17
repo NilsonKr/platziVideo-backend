@@ -143,6 +143,10 @@ const movies = [
 	},
 ];
 
+function filteredMovies(tags) {
+	return movies.filter(movie => movie.tags.includes(...tags));
+}
+
 class MoviesMockServices {
 	async getList() {
 		return Promise.resolve(movies);
@@ -153,4 +157,4 @@ class MoviesMockServices {
 	}
 }
 
-module.exports = { movies, MoviesMockServices };
+module.exports = { movies, MoviesMockServices, filteredMovies };

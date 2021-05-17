@@ -6,7 +6,7 @@ class MovieApi {
 		this.collection = 'moviesapi';
 	}
 
-	async getList({ tags } = {}) {
+	async getList(tags) {
 		//Filter Mongo syntax
 		const filter = tags && { tags: { $in: tags } };
 

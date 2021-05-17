@@ -13,6 +13,8 @@ function routes(app) {
 	router.get('/api/movies', async (req, res, next) => {
 		const { tags } = req.query;
 
+		console.log(tags);
+
 		try {
 			const data = await MoviesApi.getList(tags);
 
