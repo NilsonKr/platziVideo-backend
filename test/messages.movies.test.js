@@ -1,7 +1,7 @@
 const assert = require('assert');
 const responseMsgs = require('../utils/responseMsgs');
 
-describe.only('response messages - movies', function () {
+describe('response messages - movies', function () {
 	describe('POST/ movies - response message', function () {
 		it('Should Response with the respective message in past', function () {
 			const result = responseMsgs('Movie', 'create');
