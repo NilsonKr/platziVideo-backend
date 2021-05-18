@@ -5,6 +5,7 @@ const { movies, filteredMovies } = require('../utils/mocks/movies');
 const { getAllStub, MongoLibMock } = require('../utils/mocks/mongoLib');
 
 describe('services - movies', function () {
+	//Mocking Mongo real Lib
 	const MoviesServices = proxyquire('../services/movieApi.js', {
 		'../lib/mongoDb': MongoLibMock,
 	});
@@ -13,7 +14,7 @@ describe('services - movies', function () {
 
 	describe('Call MongoLib Actions', function () {
 		it('Should call the getAll Action from mongoLib', async function () {
-			await movieApi.getList({});
+			await movieApi.getList();
 			assert(getAllStub.called, true);
 		});
 	});

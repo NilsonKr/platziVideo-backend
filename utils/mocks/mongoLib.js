@@ -2,6 +2,8 @@ const sinon = require('sinon');
 const { movies, filteredMovies } = require('./movies');
 
 const getAllStub = sinon.stub();
+
+//Mongo db query
 const tagsFilter = { tags: { $in: ['Drama'] } };
 
 getAllStub.withArgs('moviesapi').resolves(movies);
