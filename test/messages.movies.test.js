@@ -11,12 +11,12 @@ describe('response messages - movies', function () {
 		});
 	});
 
-	describe('GET/ movies - response messaage', function () {
-		it('Should Response with plural entity and respective action', function () {
+	describe('GET/ movies - response message', function () {
+		it('Should return with action in past and entity in plural', function () {
 			const result = responseMsgs('Movie', 'list');
-			const expect = 'Movies listed';
+			const expected = 'Movies listed';
 
-			assert.strictEqual(result, expect);
+			assert.strictEqual(result, expected);
 		});
 	});
 });
