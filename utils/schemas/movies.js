@@ -9,7 +9,7 @@ const durationSchema = Joi.number().min(1).max(300);
 const contentRatingSchema = Joi.string().max(5);
 const sourceSchema = Joi.string().uri();
 const tagsSchema = Joi.array().items(Joi.string().max(50));
-
+// Movie Id
 const movieIdSchema = Joi.string().regex(/^[0-9a-fA-F]{24}/);
 
 const createMovieSchema = Joi.object({
