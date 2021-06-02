@@ -7,7 +7,7 @@ class UsersApi {
 		this.collection = 'users';
 	}
 
-	async getUsers({ email }) {
+	async getUsers(email) {
 		try {
 			const result = await this.mongoDB.getAll(this.collection, { email });
 

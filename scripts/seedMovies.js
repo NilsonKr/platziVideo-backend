@@ -5,6 +5,7 @@ const debug = require('debug')('app:scripts:movies');
 const MongoLib = require('../lib/mongoDb');
 const { movies } = require('../utils/mocks/movies');
 
+//Insert Movies in mongo
 async function seedMovies() {
 	const mongoDB = new MongoLib();
 
