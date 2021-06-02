@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const { config } = require('./config/index');
 
-const routes = require('./routes/index.js');
+const routes = require('./routes/movies');
 const { logErrors, wrapBoomError, handleErrors } = require('./utils/middleware/handleErrors');
 const notFoundHandler = require('./utils/middleware/notFoundHandler');
 

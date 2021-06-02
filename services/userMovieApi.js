@@ -6,7 +6,7 @@ class UserMovieApi {
 		this.collection = 'userMovies';
 	}
 
-	async getMovies({ userId }) {
+	async getMovies(userId) {
 		try {
 			const userMovies = await this.mongoDB.getAll(this.collection, { userId: userId });
 
