@@ -25,6 +25,7 @@ const users = [
 	},
 ];
 
+//Build Final User
 async function createUser(mongo, user) {
 	const { name, email, password, isAdmin } = user;
 
@@ -40,6 +41,7 @@ async function createUser(mongo, user) {
 	return newUserId;
 }
 
+//Insert Users in mongoDb
 async function seedUsers() {
 	const mongoDB = new MongoLib();
 

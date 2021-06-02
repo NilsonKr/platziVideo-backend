@@ -5,6 +5,7 @@ const crypto = require('crypto');
 
 const MongoLib = require('../lib/mongoDb');
 
+//Authorization
 const adminScopes = [
 	'signin:auth',
 	'signup:auth',
@@ -41,6 +42,7 @@ const ApiTokens = [
 	},
 ];
 
+//Insert Tokens in mongo
 async function seedApiTokens() {
 	const mongoDB = new MongoLib();
 
