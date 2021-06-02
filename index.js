@@ -2,14 +2,17 @@ const express = require('express');
 const app = express();
 const { config } = require('./config/index');
 
-const routes = require('./routes/movies');
+const moviesRoutes = require('./routes/movies');
+const userMoviesRoutes = require('./routes/userMovies');
+
 const { logErrors, wrapBoomError, handleErrors } = require('./utils/middleware/handleErrors');
 const notFoundHandler = require('./utils/middleware/notFoundHandler');
 
 //Parse And routes
 app.use(express.json());
 
-routes(app);
+moviesRoutes(app);
+userMoviesRoutes(app);
 //Catch 404
 app.use(notFoundHandler);
 

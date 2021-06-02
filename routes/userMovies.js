@@ -3,7 +3,7 @@ const UserMoviesApi = require('../services/userMovieApi');
 
 const validationHandler = require('../utils/middleware/handleValidation');
 
-const { userMovieSchema } = require('../utils/schemas/userMovies');
+const { userMovieSchema, userMovieIdSchema } = require('../utils/schemas/userMovies');
 const { userIdSchema } = require('../utils/schemas/users');
 
 function userMovies(app) {
@@ -26,6 +26,40 @@ function userMovies(app) {
 			next(error);
 		}
 	});
+
+	router.post('/', validationHandler(userMovieSchema), (req, res, next) => {
+		const userMovie = req.body;
+
+		try {
+			const newMovieId = await userMoviesApi.addMovie(userMovie);
+
+			res.status(200).json({
+				data: newMovieId,
+				message: 'Movie Added',
+			});
+		} catch (error) {
+			next(error);
+		}
+	});
+
+	router.delete(
+		'/:userMovieId',
+		validationHandler({ userMovieId: userMovieIdSchema }, 'params'),
+		(req, res, next) => {
+			const id = req.params.userMovieId;
+
+			try {
+				const movieRemovedId = await userMoviesApi.deleteMovie(id);
+
+				res.status(200).json({
+					data: movieRemovedId,
+					message: 'Movie Removed Succesfully',
+				});
+			} catch (error) {
+				next(error);
+			}
+		}
+	);
 }
 
 module.exports = userMovies;
