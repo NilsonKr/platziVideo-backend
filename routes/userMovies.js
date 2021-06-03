@@ -27,7 +27,7 @@ function userMovies(app) {
 		}
 	});
 
-	router.post('/', validationHandler(userMovieSchema), (req, res, next) => {
+	router.post('/', validationHandler(userMovieSchema), async (req, res, next) => {
 		const userMovie = req.body;
 
 		try {
@@ -45,7 +45,7 @@ function userMovies(app) {
 	router.delete(
 		'/:userMovieId',
 		validationHandler({ userMovieId: userMovieIdSchema }, 'params'),
-		(req, res, next) => {
+		async (req, res, next) => {
 			const id = req.params.userMovieId;
 
 			try {

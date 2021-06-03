@@ -9,7 +9,7 @@ class UsersApi {
 
 	async getUsers(email) {
 		try {
-			const result = await this.mongoDB.getAll(this.collection, { email });
+			const [result] = await this.mongoDB.getAll(this.collection, { email });
 
 			return result;
 		} catch (error) {
