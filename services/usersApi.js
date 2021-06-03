@@ -20,13 +20,13 @@ class UsersApi {
 	async createUser({ name, email, password }) {
 		try {
 			const passwordHashed = await bcrypt.hash(password, 10);
-			const userCreated = await this.mongoDB.create(this.collection, {
+			const userCreatedID = await this.mongoDB.create(this.collection, {
 				name,
 				email,
 				password: passwordHashed,
 			});
 
-			return userCreated;
+			return userCreatedID;
 		} catch (error) {
 			throw new Error(error);
 		}
