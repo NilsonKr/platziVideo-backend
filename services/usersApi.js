@@ -31,6 +31,22 @@ class UsersApi {
 			throw new Error(error);
 		}
 	}
+
+	async getOrCreateUser(user) {
+		try {
+			const queriedUser = await this.getUsers(user.email);
+
+			if (queriedUser) {
+				return queriedUser;
+			}
+
+			await this.createUser(user);
+
+			return user;
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
 }
 
 module.exports = UsersApi;

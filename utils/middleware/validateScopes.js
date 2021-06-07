@@ -6,10 +6,10 @@ function validateScopes(allowedScopes) {
 			next(boom.unauthorized());
 		}
 
-		const scopesList = allowedScopes.map(scope => req.user.scopes.includes(scope));
+		const validScopes = allowedScopes.map(scope => req.user.scopes.includes(scope));
 
-		if (scopesList.includes(false)) {
-			next(boom.unauthorized('Missing Scopes Authorized'));
+		if (validScopes.includes(false)) {
+			next(boom.unauthorized('Missing Scopes'));
 		}
 
 		next();

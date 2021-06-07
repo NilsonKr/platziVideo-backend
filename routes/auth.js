@@ -7,7 +7,7 @@ const UserServices = require('../services/usersApi');
 const ApiTokensService = require('../services/apiTokens');
 
 const validationHandler = require('../utils/middleware/handleValidation');
-const { userSchema } = require('../utils/schemas/users');
+const { createUserSchema } = require('../utils/schemas/users');
 const boom = require('@hapi/boom');
 
 //Basic Strategy passport authentication
@@ -72,7 +72,7 @@ function authRoutes(app) {
 		})(req, res, next);
 	});
 
-	router.post('/sign-up', validationHandler(userSchema), async (req, res, next) => {
+	router.post('/sign-up', validationHandler(createUserSchema), async (req, res, next) => {
 		try {
 			const userIdCreated = await userApi.createUser(req.body);
 
@@ -80,6 +80,37 @@ function authRoutes(app) {
 				data: userIdCreated,
 				message: 'User Created',
 			});
+		} catch (error) {
+			next(error);
+		}
+	});
+
+	//OAuth Provider
+	router.post('/sign-provider', async (req, res, next) => {
+		const { apiToken, ...user } = req.body;
+
+		try {
+			const queriedUser = await userApi.getOrCreateUser(user);
+			const apiKey = await apiTokens.getApiToken(apiToken);
+
+			if (!apiKey) {
+				next(boom.unauthorized());
+			}
+
+			const { _id: id, name, email } = queriedUser;
+
+			const payload = {
+				sub: id,
+				name,
+				email,
+				scopes: apiKey.scopes,
+			};
+
+			const newJwt = jwt.sign(payload, config.authJwtSecret, {
+				expiresIn: '15m',
+			});
+
+			res.status(200).json({ token: newJwt, user: { id, name, email } });
 		} catch (error) {
 			next(error);
 		}

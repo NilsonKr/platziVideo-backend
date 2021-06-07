@@ -43,10 +43,12 @@ function userMovies(app) {
 		async (req, res, next) => {
 			const userMovie = req.body;
 
+			console.log(userMovie);
+
 			try {
 				const newMovieId = await userMoviesApi.addMovie(userMovie);
 
-				res.status(200).json({
+				res.status(201).json({
 					data: newMovieId,
 					message: 'Movie Added',
 				});
