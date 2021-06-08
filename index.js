@@ -1,4 +1,5 @@
 const express = require('express');
+const helmet = require('helmet');
 const app = express();
 const { config } = require('./config/index');
 
@@ -11,6 +12,7 @@ const notFoundHandler = require('./utils/middleware/notFoundHandler');
 
 //Parse And routes
 app.use(express.json());
+app.use(helmet());
 
 authRoutes(app);
 moviesRoutes(app);

@@ -37,7 +37,7 @@ function authRoutes(app) {
 			try {
 				req.login(user, { session: false }, async error => {
 					if (error) {
-						next(boom.unauthorized());
+						next(error);
 					}
 
 					//Retrieve Api Key
