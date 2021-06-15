@@ -23,7 +23,7 @@ passport.use(
 
 				delete user.password;
 
-				return cb(false, { ...user, scopes: tokenPayload.scopes });
+				return cb(false, { ...user, scopes: tokenPayload.scopes, apiToken: tokenPayload.apiToken });
 			} catch (error) {
 				return cb(err, false);
 			}

@@ -14,6 +14,10 @@ const boom = require('@hapi/boom');
 
 require('../utils/auth/basicStrategy');
 
+//JWT Strategy passport
+
+require('../utils/auth/strategyJWT');
+
 function authRoutes(app) {
 	const router = express.Router();
 	app.use('/api/auth', router);
@@ -40,13 +44,6 @@ function authRoutes(app) {
 						next(error);
 					}
 
-					//Retrieve Api Key
-					const apiKey = await apiTokens.getApiToken(apiToken);
-
-					if (!apiKey) {
-						next(boom.unauthorized());
-					}
-
 					//Build JWT
 					const { _id, name, email } = user;
 
@@ -54,7 +51,7 @@ function authRoutes(app) {
 						sub: _id,
 						name,
 						email,
-						scopes: apiKey.scopes,
+						apiToken: apiToken,
 					};
 
 					const newJwt = jwt.sign(payload, config.authJwtSecret, {
@@ -107,7 +104,7 @@ function authRoutes(app) {
 			};
 
 			const newJwt = jwt.sign(payload, config.authJwtSecret, {
-				expiresIn: '15m',
+				expiresIn: '1h',
 			});
 
 			res.status(200).json({ token: newJwt, user: { id, name, email } });
@@ -115,6 +112,39 @@ function authRoutes(app) {
 			next(error);
 		}
 	});
+
+	//Get Authorization Token
+
+	router.post(
+		'/authorizate',
+		passport.authenticate('jwt', { session: false }),
+		async (req, res, next) => {
+			const { _id: id, name, email, apiToken } = req.user;
+
+			try {
+				const apiKey = await apiTokens.getApiToken(apiToken);
+
+				if (!apiKey) {
+					return next(boom.unauthorized());
+				}
+
+				const payload = {
+					sub: id,
+					name,
+					email,
+					scopes: apiKey.scopes,
+				};
+
+				const authJWT = jwt.sign(payload, config.authJwtSecret, {
+					expiresIn: '1h',
+				});
+
+				res.status(200).json(authJWT);
+			} catch (error) {
+				next(error);
+			}
+		}
+	);
 }
 
 module.exports = authRoutes;

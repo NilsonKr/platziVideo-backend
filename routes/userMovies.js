@@ -26,8 +26,10 @@ function userMovies(app) {
 			try {
 				const result = await userMoviesApi.getMovies(userId);
 
+				const movies = result.map(favorite => ({ ...favorite, id: favorite._id }));
+
 				res.status(200).json({
-					data: result,
+					data: movies,
 					message: 'User Movies List',
 				});
 			} catch (error) {
@@ -42,8 +44,6 @@ function userMovies(app) {
 		validationHandler(userMovieSchema),
 		async (req, res, next) => {
 			const userMovie = req.body;
-
-			console.log(userMovie);
 
 			try {
 				const newMovieId = await userMoviesApi.addMovie(userMovie);

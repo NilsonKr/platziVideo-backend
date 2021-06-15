@@ -28,8 +28,10 @@ function routes(app) {
 			try {
 				const data = await MoviesApi.getList(tags);
 
+				const movies = data.map(movie => ({ ...movie, id: movie._id }));
+
 				res.status(200).json({
-					data: data,
+					data: movies,
 					message: 'Movies Listed',
 				});
 			} catch (error) {
