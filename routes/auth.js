@@ -35,13 +35,13 @@ function authRoutes(app) {
 		//Custom Callback
 		passport.authenticate('basic', (error, user) => {
 			if (error || !user) {
-				next(boom.unauthorized());
+				return next(boom.unauthorized());
 			}
 
 			try {
 				req.login(user, { session: false }, async error => {
 					if (error) {
-						next(error);
+						return next(error);
 					}
 
 					//Build JWT
@@ -55,7 +55,7 @@ function authRoutes(app) {
 					};
 
 					const newJwt = jwt.sign(payload, config.authJwtSecret, {
-						expiresIn: '15m',
+						expiresIn: '5m',
 					});
 
 					res.status(200).json({
@@ -88,11 +88,6 @@ function authRoutes(app) {
 
 		try {
 			const queriedUser = await userApi.getOrCreateUser(user);
-			const apiKey = await apiTokens.getApiToken(apiToken);
-
-			if (!apiKey) {
-				next(boom.unauthorized());
-			}
 
 			const { _id: id, name, email } = queriedUser;
 
@@ -100,11 +95,11 @@ function authRoutes(app) {
 				sub: id,
 				name,
 				email,
-				scopes: apiKey.scopes,
+				apiToken: apiToken,
 			};
 
 			const newJwt = jwt.sign(payload, config.authJwtSecret, {
-				expiresIn: '1h',
+				expiresIn: '5m',
 			});
 
 			res.status(200).json({ token: newJwt, user: { id, name, email } });
@@ -120,6 +115,7 @@ function authRoutes(app) {
 		passport.authenticate('jwt', { session: false }),
 		async (req, res, next) => {
 			const { _id: id, name, email, apiToken } = req.user;
+			const { remember } = req.query;
 
 			try {
 				const apiKey = await apiTokens.getApiToken(apiToken);
@@ -135,8 +131,10 @@ function authRoutes(app) {
 					scopes: apiKey.scopes,
 				};
 
+				const time = remember === 'true' ? '30d' : '3h';
+
 				const authJWT = jwt.sign(payload, config.authJwtSecret, {
-					expiresIn: '1h',
+					expiresIn: time,
 				});
 
 				res.status(200).json(authJWT);
